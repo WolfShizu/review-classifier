@@ -1,4 +1,5 @@
 import ast
+import joblib
 
 import pandas
 
@@ -41,3 +42,6 @@ print("Acentos removidos")
 # Salva os dados limpos
 data_frame.to_csv(config.CLEAN_REVIEWS_PATH, index= False)
 print("Dados limpos salvos")
+
+joblib.dump(utils.pt_stopwords, config.STOPWORDS_PATH)
+print("Stopwords salvas")
