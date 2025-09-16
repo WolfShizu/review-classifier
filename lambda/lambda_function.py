@@ -22,7 +22,15 @@ def lambda_handler(event, context):
 
     body = json.loads(event["body"])
     review_title = body.get("review_title", "")
-    review_text = body["review_text"]
+    review_text = body.get("review_text", None)
+    
+    if review_text == None:
+        return {
+            "statusCode": 400,
+            "body": json.dumps({
+                "error": "The field 'review_text' is required."
+            })
+        }
 
     review_full_text = review_title + " " + review_text
 
@@ -31,9 +39,11 @@ def lambda_handler(event, context):
 
     predicted_score = model.predict(text_vector)[0]
 
-    allow_neutral = body.get("allow_neutral", False)
-    show_score = body.get("show_score", True)
-    show_full_score = body.get("show_full_score", False)
+    warnings = []
+
+    allow_neutral = utils.get_valid_bool(body, "allow_neutral", False, warnings)
+    show_score = utils.get_valid_bool(body, "show_score", True, warnings)
+    show_full_score = utils.get_valid_bool(body, "show_full_score", False, warnings)
 
     classification = ""
 
@@ -54,6 +64,9 @@ def lambda_handler(event, context):
             response["score"] = predicted_score
         else:
             response["score"] = float(f"{predicted_score:.2f}")
+
+    if warnings:
+        response["warnings"] = warnings
 
     return {
         'statusCode': 200,

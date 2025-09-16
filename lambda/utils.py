@@ -40,3 +40,11 @@ class Utils:
         corrected_text = " ".join(corrected_tokens)
 
         return corrected_text
+    
+    def get_valid_bool(self, data, key, default, warnings):
+        value = data.get(key, default)
+        if isinstance(value, bool):
+            return value
+        
+        warnings.append(f"{key} was not a boolean. Defaulted to {default}.")
+        return default
