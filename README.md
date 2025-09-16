@@ -98,3 +98,15 @@ Suas etapas são:
 - **Exportação do modelo e vetorizador:** O modelo e o vetorizador são armazenados em ``models/``, para uso no Lambda.
 
 # API (Lambda + API Gateway)
+A API é disponibilizada através do **API Gateway**, que encaminha as requisições para o Lambda. O Lambda processa o texto e retorna a classificação da review.
+O modelo, vetorizador e stopwords utilizados estão localizados em ``/models``.
+Etapas do Lambda:
+- **Processa o texto recebido:** Após receber a requisição, o texto passa pelas seguintes etapas:
+    - Converte o texto para minúsculo.
+    - Remove pontuação, acentos e números.
+    - Remoção de stopwords.
+    - Correção do texto.
+    - Vetorização.
+- **Classificação:** A classificação da review é feita com o modelo treinado.
+- **Retorna a resposta:** A API retorna a resposta com base nas opções definidas na requisição.
+Como o tamanho total das bibliotecas excede o tamanho limite das camadas do Lambda, algumas delas (``pyspellchecker``, ``Unidecode`` e ``joblib``) são instaladas durante a execução da função.
