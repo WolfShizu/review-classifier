@@ -1,6 +1,16 @@
 import json
-import joblib
+import sys
+import subprocess
+sys.path.append("/tmp")
 
+def install_library(library_name):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", library_name, "-t", "/tmp/"])
+
+install_library("pyspellchecker")
+install_library("Unidecode")
+install_library("joblib")
+
+import joblib
 from utils import Utils
 import config
 
