@@ -57,11 +57,14 @@ class Utils:
     def _correct_text(self, text):
         tokens = text.split()
 
-        corrected_tokens = [
-            self.spell.correction(token) if self.spell.correction(token) is not None else token
-            for token in tokens
-            ]
-        
+        corrected_tokens = []
+
+        for token in tokens:
+            corrected_token = self.spell.correction(token)
+
+            if corrected_token is None:
+                corrected_token = token
+
         self.total_texts += 1
         self.total_words += len(tokens)
 
