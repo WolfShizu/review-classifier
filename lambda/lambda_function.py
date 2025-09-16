@@ -1,14 +1,24 @@
 import json
 import sys
-import subprocess
-sys.path.append("/tmp")
+import os
+import zipfile
+import boto3
 
-def install_library(library_name):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", library_name, "-t", "/tmp/"])
+def import_libraries():
+    s3 = boto3.client("s3")
+    bucket_name = os.environ["BUCKET_NAME"]
+    library_key = os.environ["LIBRARY_KEY"]
+    local_path = "/tmp/library.zip"
+    extract_path = "/tmp/libraries"
 
-install_library("pyspellchecker")
-install_library("Unidecode")
-install_library("joblib")
+    s3.download_file(bucket_name, library_key, local_path)
+
+    with zipfile.ZipFile(local_path, "r") as zip_file:
+        zip_file.extractall(extract_path)
+
+    sys.path.append(extract_path)
+
+import_libraries()
 
 import joblib
 from utils import Utils
