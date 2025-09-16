@@ -109,4 +109,17 @@ Etapas do Lambda:
     - Vetorização.
 - **Classificação:** A classificação da review é feita com o modelo treinado.
 - **Retorna a resposta:** A API retorna a resposta com base nas opções definidas na requisição.
-Como o tamanho total das bibliotecas excede o tamanho limite das camadas do Lambda, algumas delas (``pyspellchecker``, ``Unidecode`` e ``joblib``) são instaladas durante a execução da função.
+Como o tamanho total das bibliotecas excede o tamanho limite das camadas do Lambda, algumas delas (``pyspellchecker``, ``Unidecode`` e ``joblib``) são importadas do S3.
+O tempo médio de resposta antes do cold start é de ~9s. Após o cold start, o tempo de resposta passa a ser de ~1s.
+
+### Configurações do Lambda
+Para importar o arquivo compactado das bibliotecas para o Lambda, é necessário enviá-lo primeiro ao S3. Esse arquivo deve conter as bibliotecas ``pyspellchecker``, ``Unidecode`` e ``joblib`` compactadas.
+
+No Lambda, as variáveis de ambiente devem estar configuradas da seguinte forma:
+```
+BUCKET_NAME = "Nome do seu bucket"
+LIBRARY_KEY = "Caminho para o arquivo compactado"
+```
+O tempo limite do lambda deve estar configurado entre 15 e 30 segundos.
+Para maior eficiência, o Lambda deve estar configurado com **1024MB de memória RAM**.
+> Obs: Quanto mais memória RAM, mais rápida será a primeira resposta (cold start).
