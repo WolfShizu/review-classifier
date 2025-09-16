@@ -81,6 +81,7 @@ Suas etapas são:
 - **Correção ortográfica:** Corrige as palavras usando a biblioteca ``pyspellchecker``.
 - **Exportação do dataset processado:** Armazena os dados processados em ``data/processed/clean_reviews.csv``
 - **Exportação das stopwords:** As stopwords são armazenadas em ``models/`` para uso no Lambda.
+> Obs: O pré-processamento dos dados é feito localmente por causa do seu longo tempo de execução.
 
 # Treinamento do Modelo
 O **Ridge Regression** é utilizado no projeto por sua simplicidade e eficiência, e mostrou bom desempenho na classificação das reviews.
